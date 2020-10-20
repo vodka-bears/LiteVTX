@@ -1,1 +1,1 @@
-This is an alternative vtx MCU firmware for Betafpv Lite Brushed V2 flight controller board. The factory one was about 50 MHz ahead of an actual frequency so I made this.
+This is an alternative vtx MCU firmware for Betafpv Lite Brushed V2 flight controller board. The factory one was about 50 MHz ahead of a set frequency so I made this.

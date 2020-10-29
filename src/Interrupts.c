@@ -15,7 +15,15 @@ SI_INTERRUPT (UART0_ISR, UART0_IRQn)
 	{
 		byte = SBUF0;
 		if (UART_Buffer_Size == 1 && byte != 0x55)
+		{
 			UART_Buffer_Size = 0;
+			return;
+		}
+		if (UART_Buffer_Size == 3 && byte > 5)
+		{
+			UART_Buffer_Size = 0;
+			return;
+		}
 		if (UART_Buffer_Size == 0 && byte == 0xAA ||
 				UART_Buffer_Size == 1 && byte == 0x55 ||
 				UART_Buffer_Size > 1)

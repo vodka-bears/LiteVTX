@@ -3,6 +3,18 @@ import os
 import sys
 import argparse
 
+RTC6705_H = """#ifndef rtc6705_h
+#define rtc6705_h
+
+#define RTC6705_REG0_HEAD	0x10
+#define RTC6705_REG0_BODY {r} //fine-tuning, fixing hardware issue
+
+#define RTC6705_REG1_HEAD 0x11 //10001b to write to reg
+#define POLYGEN 0xd5
+
+#endif //rtc6705_h"""
+
+RTC6705_H_PATH = os.path.join(os.curdir, 'inc', 'rtc6705.h')
 
 FREQ_H = """#ifndef freq_h
 #define freq_h
@@ -28,6 +40,7 @@ VTX_FREQ = (
 
 parser = argparse.ArgumentParser()
 parser.add_argument("offset",type=int, default=0, help="offset in MHz")
+parser.add_argument("r", type=int, default=400, help="R-counter divider ratio")
 
 def generate_pretty_list(nums):
     string = ""
@@ -48,15 +61,18 @@ if __name__ == "__main__":
 
     for n, freq in enumerate(VTX_FREQ):
         freq += args.offset
-        n = int(freq // (2 * 64 * 0.02))
-        a = int(freq / (0.02 * 2) - n * 64)
+        n = int(freq // (2 * 64 * 8 / args.r))
+        a = int(freq / (8 / args.r* 2) - n * 64)
         a_list.append(a)
         n_list.append(n)
 
     a_string = generate_pretty_list(a_list)
     n_string = generate_pretty_list(n_list)
 
+    with open(RTC6705_H_PATH, "w") as rtch:
+        rtch.write(RTC6705_H.format(r=str(args.r)))
+
     with open(FREQ_H_PATH, "w") as freqh:
         freqh.write(FREQ_H.format(a=a_string, n=n_string))
-    print("File saved to {}".format(FREQ_H_PATH))
+    print("Files generated and saved:\n {}\n {}".format(FREQ_H_PATH, RTC6705_H_PATH))
 

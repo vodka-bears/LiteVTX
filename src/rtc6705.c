@@ -1,29 +1,13 @@
 #include <SI_EFM8BB2_Register_Enums.h>
 #include "rtc6705.h"
 #include "stdint.h"
+#include "freq.h"
 
 extern void delayMSn(uint8_t);
 
 SI_SBIT(MOSI, SFR_P1, 2);
 SI_SBIT(NSS, SFR_P1, 3);
 SI_SBIT(CLK, SFR_P1, 4);
-
-
-const uint8_t val_a_list[40] = {
-48, 60, 8, 20, 32, 44, 56, 4,
-12, 39, 2, 29, 56, 19, 46, 9,
-16, 28, 40, 52, 36, 24, 12, 0,
-59, 47, 35, 23, 11, 63, 51, 39,
-57, 22, 51, 16, 45, 10, 39, 4,
-};
-
-const uint16_t val_n_list[40] = {
-2293, 2285, 2278, 2270, 2262, 2254, 2246, 2239,
-2242, 2249, 2257, 2264, 2271, 2279, 2286, 2294,
-2231, 2223, 2215, 2207, 2301, 2309, 2317, 2325,
-2244, 2252, 2260, 2268, 2276, 2283, 2291, 2299,
-2212, 2227, 2241, 2256, 2270, 2285, 2299, 2314,
-}; //these are not real values but fine-tuned tweaked ones
 
 uint8_t CRC8(uint8_t *nice_data, uint8_t len)
 {
